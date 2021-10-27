@@ -1,0 +1,26 @@
+@charset "ISO-8859-1";
+
+
+p{
+color: #FF0000;
+}
+
+h1{
+	color:pink;
+	margin-left:40px;
+}
+
+.image-containers{
+	
+}
+
+.image-wrapper{
+	display:inline;
+}
+
+.image-item{
+	vertical-align :middle;
+	width :250px;
+	height :250px;
+	border-radius:50%;
+}
