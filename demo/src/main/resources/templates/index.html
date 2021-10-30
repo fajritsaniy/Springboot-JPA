@@ -30,6 +30,27 @@
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
     <script src="assets/js/modernizr.js"></script> <!-- Modernizr -->
+    <!-- Modernizr -->
+<style>
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  padding: 8px 16px;
+  text-decoration: none;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+</style>
+    
   </head>
 
 <!-- Body Start
@@ -230,16 +251,16 @@
 
                     <ul class="resumeList">
                         <li class="resTitle"><h4>Education</h4></li>
-                        <div th:each="itemResume : ${resume}">
-                        <div th:if ="${itemResume.tipe == 'Education'}">
+                        <div th:each="itemResumeEducation : ${resumeEducation.getContent()}">                           <!-- INI TIDAK EFEKTIF KARENA DISURUH UNTUK BACA SEMUA TABELNYA -->
+                    <!--    <div th:if ="${itemResume.tipe == 'Education'}">-->
                         <li>
                             <div class="resumeIcon">
                                 <div class="icon icon-basic-book"></div>
                             </div>
                             <div class="resumeContent">
-                                <h5 th:text="${itemResume.judul}"></h5>
-                                <span th:text="${itemResume.tahun}"></span>
-                                <p class="plineheight"  th:text="${itemResume.keterangan}" >
+                                <h5 th:text="${itemResumeEducation.judul}"></h5>
+                                <span th:text="${itemResumeEducation.tahun}"></span>
+                                <p class="plineheight"  th:text="${itemResumeEducation.keterangan}" >
                                 
                                </p>
                             </div>
@@ -254,17 +275,17 @@
 
                     <ul class="resumeList">
                         <li class="resTitle"><h4>Employment</h4></li>
-                        <div th:each="itemResume : ${resume}">
-                        <div th:if ="${itemResume.tipe == 'Employment'}">
+                        <div th:each="itemResumeEmployment : ${resumeEmployment}">
+                      <!--   <div th:if ="${itemResume.tipe == 'Employment'}"> -->
                         
                         <li>
                             <div class="resumeIcon">
                                 <div class="icon icon-basic-case"></div>
                             </div>
                             <div class="resumeContent">
-                                <h5 th:text="${itemResume.judul}"></h5>
-                                <span th:text="${itemResume.tahun}"></span>
-                                <p class="plineheight" th:text="${itemResume.keterangan}">
+                                <h5 th:text="${itemResumeEmployment.judul}"></h5>
+                                <span th:text="${itemResumeEmployment.tahun}"></span>
+                                <p class="plineheight" th:text="${itemResumeEmployment.keterangan}">
                                 </p>
                         </li>
                     </ul>
@@ -279,6 +300,27 @@
         </div>
     </section>
 
+<!-- Paging section  -->
+ 
+				<div class="pagination">
+				<span th:if="${resumeEducation.hasPrevious()}" >
+					<a th:href="@{/(page=${i},size=${resumeEducation.size})}">&laquo;</a> 
+				</span>
+				<th:block th:each="i: ${#numbers.sequence(0, resumeEducation.getTotalPages() -1)}">
+				
+				<span th:if ="${resumeEducation.getNumber() == i}" >
+					<a class="active" th:href="@{/(page=${i},size=${resumeEducation.size})}"><span th:text = ${i}+1/></a> 
+				</span>
+				<span th:unless ="${resumeEducation.getNumber() == i}" >
+					<a th:href="@{/(page=${i},size=${resumeEducation.size})}"><span th:text = ${i}+1/></a> 
+				</span>
+				
+				</th:block>
+				
+					<span th:if="${resumeEducation.hasNext()}" >
+					<a th:href="@{/(page=${i}+1,size=${resumeEducation.size})}">&raquo;</a>
+					</span>
+				</div>
 		
 <!-- section Portfolio
     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -665,24 +707,28 @@
 
                     <!--MAIN FORM-->
 
-                    <form method="post" action="assets/contact.php" name="contactform" id="contactform">
+                    <form method="post" th:action="@{/}" name="contactform" id="contactform" th:object="${contact}">
 
                     <fieldset>
 
                       <div class="col-md-4 col-sm-6 col-xs-12">
-                        <input name="name" type="text" id="name" placeholder="Name* :" size="30" value="" />
+                        <input name="name" type="text" id="name" placeholder="Name* :" size="30" value="" th:field="*{name}"/>
                       </div>
 
                       <div class="col-md-4 col-sm-6 col-xs-12">
-                        <input name="email" type="text" id="email" placeholder="E-mail* :" size="30" value="" />
+                        <input name="email" type="text" id="email" placeholder="E-mail* :" size="30" value="" th:field="*{email}"/>
                       </div>
 
                       <div class="col-md-4 col-sm-12 col-xs-12">
-                        <input name="subject" type="text" id="subject" placeholder="Subject* :" size="30" value="" />
+                        <input name="subject" type="text" id="subject" placeholder="Subject* :" size="30" value="" th:field="*{subject}"/>
+                      </div>
+                      
+                      <div class="col-md-4 col-sm-12 col-xs-12">
+                        <input name="address" type="text" id="address" placeholder="Address* :" size="30" value="" th:field="*{address}"/>
                       </div>
 
                       <div class="col-md-12 col-sm-12 col-xs-12">
-                        <textarea name="comments" cols="40" rows="3" placeholder="Message* :" id="comments"></textarea>
+                        <textarea name="comments" cols="40" rows="3" placeholder="Message* :" id="comments" th:field="*{message}"></textarea>
                       </div>
 
                         <input type="submit" class="submit" id="submit" value="Send message" />
